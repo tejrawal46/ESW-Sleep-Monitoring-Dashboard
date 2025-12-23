@@ -2,6 +2,8 @@
 
 A comprehensive web application for monitoring and analyzing sleep quality data from ThingSpeak across three test subjects.
 
+**Live Demo:** [https://astr0lynx.github.io/ESW-Sleep-Monitoring-Dashboard/](https://astr0lynx.github.io/ESW-Sleep-Monitoring-Dashboard/)
+
 ## Overview
 
 This website integrates with ThingSpeak IoT platform to fetch sleep quality data and provides:
