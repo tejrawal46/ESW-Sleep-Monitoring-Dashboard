@@ -187,11 +187,9 @@ Modify the `SleepAnalyzer` class in `thingspeak.js` to adjust:
 
 Developed as part of the Embedded Systems Workshop (ESW) course.
 
-**Team Members:**
+**Contributors:**
 - Guntesh Singh
-- Avani Shukla
-- Khushi Sharma
-- Nikhith Vasishta
+- Khushi Dhingra ([@KhushiiiD](https://github.com/KhushiiiD))
 
 ## License
 
