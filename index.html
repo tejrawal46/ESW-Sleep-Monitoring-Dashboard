@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Quality Monitoring - Nap Detection Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dark-mode.css">
+</head>
+<body>
+    <header>
+        <h1>Sleep Quality Monitoring Dashboard</h1>
+        <p>Short Nap & Desk-Sleep Detection for Campus Environments</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="subject1.html">Subject 1</a></li>
+            <li><a href="subject2.html">Subject 2</a></li>
+            <li><a href="subject3.html">Subject 3</a></li>
+            <li><a href="subject4.html">Subject 4</a></li>
+            <li><a href="summaries.html">Summaries</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Project Introduction -->
+        <section class="intro">
+            <h2>Project Overview</h2>
+            <p>Non-intrusive wearable system for monitoring short naps and desk-sleep in classroom/workspace environments using multi-sensor biometric data.</p>
+            
+            <div class="project-overview">
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <h3>💤 Short Nap Focus</h3>
+                        <ul>
+                            <li>Desk-sleep detection system</li>
+                            <li>Realistic campus testing</li>
+                            <li>Classroom drowsiness monitoring</li>
+                        </ul>
+                    </div>
+                    <div class="overview-item">
+                        <h3>📊 Multi-Signal Analysis</h3>
+                        <ul>
+                            <li>Muscle activity (EMG sensor)</li>
+                            <li>Heart rate (ECG sensor)</li>
+                            <li>Oxygen levels (SpO2 sensor)</li>
+                            <li>Body movement (IMU sensor)</li>
+                        </ul>
+                    </div>
+                    <div class="overview-item">
+                        <h3>🔬 Volunteer Testing</h3>
+                        <ul>
+                            <li>Real data from test subjects</li>
+                            <li>ThingSpeak IoT integration</li>
+                            <li>Comprehensive sleep stage mapping</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Dashboard -->
+        <section class="dashboard">
+            <h2>Dashboard Sections</h2>
+            
+            <div class="project-cards">
+                <div class="project-card">
+                    <h3>Subject Data</h3>
+                    <ul>
+                        <li>Individual sleep monitoring</li>
+                        <li>Baseline measurements</li>
+                        <li>Nap session analysis</li>
+                    </ul>
+                    <div class="card-actions">
+                        <a href="subject1.html" class="btn">Subject 1</a>
+                        <a href="subject2.html" class="btn btn-secondary">Subject 2</a>
+                        <a href="subject3.html" class="btn btn-accent">Subject 3</a>
+                        <a href="subject4.html" class="btn">Subject 4</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Overview -->
+        <section class="technical-overview">
+            <h2>Technical Specifications</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <h4>Sensors</h4>
+                    <ul>
+                        <li>EMG sensor (Muscle Sensor v3)</li>
+                        <li>ECG sensor (AD8232)</li>
+                        <li>SpO2 sensor (MAX30102)</li>
+                        <li>IMU sensor (MPU6080)</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>System Design</h4>
+                    <ul>
+                        <li>ESP32 microcontroller</li>
+                        <li>3 PCB modules (sensors + power)</li>
+                        <li>Wearable backpack-mounted design</li>
+                        <li>Calibrated against smartwatch</li>
+                        <li>ECG sampling at 250 Hz</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>Data Platform</h4>
+                    <ul>
+                        <li>ThingSpeak IoT integration</li>
+                        <li>8-channel data streaming</li>
+                        <li>Real-time web dashboard</li>
+                        <li>Multi-subject monitoring</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="config-section">
+            <h2>ThingSpeak Configuration</h2>
+            <p>System configured for real-time data collection from ThingSpeak platform.</p>
+            <div class="config-info">
+                <div class="info-item">
+                    <strong>Channel ID:</strong>
+                    <span>3188672</span>
+                </div>
+                <div class="info-item">
+                    <strong>Data Fields:</strong>
+                    <ul>
+                        <li>Field 1: BPM</li>
+                        <li>Field 2: SpO2</li>
+                        <li>Field 3: ECG</li>
+                        <li>Field 4: Temperature (unused)</li>
+                        <li>Field 5: EMG</li>
+                        <li>Field 6: MPU</li>
+                        <li>Field 7: User ID (1-4)</li>
+                        <li>Field 8: Session ID (0=baseline, 1-3=sleep)</li>
+                    </ul>
+                </div>
+                <div class="info-item">
+                    <strong>Status:</strong> <span id="connectionStatus" class="status-ready">Checking...</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sleep Quality Research Project</p>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="thingspeak.js"></script>
+    <script src="animations.js"></script>
+    <script src="data-visualization.js"></script>
+    <script src="dynamic-enhancements.js"></script>
+</body>
+</html>

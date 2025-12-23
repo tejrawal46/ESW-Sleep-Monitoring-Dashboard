@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Analysis Summaries - Sleep Quality Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <style>
+        .summary-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .summary-nav button {
+            padding: 0.75rem 1.5rem;
+            background: rgba(26, 26, 36, 0.8);
+            color: var(--text-secondary);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+        .summary-nav button:hover {
+            background: rgba(0, 245, 255, 0.1);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+        .summary-nav button.active {
+            background: var(--gradient-neon);
+            border-color: transparent;
+            color: var(--text-primary);
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+        }
+        .summary-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .summary-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .summary-section {
+            background: rgba(18, 18, 26, 0.6);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 245, 255, 0.1);
+        }
+        .summary-section h2 {
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-bottom: 2px solid rgba(0, 245, 255, 0.3);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .summary-section h3 {
+            color: var(--neon-cyan);
+            margin-top: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .stat-card {
+            background: rgba(26, 26, 36, 0.8);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 245, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 245, 255, 0.3);
+        }
+        .stat-card strong {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stat-value {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+        }
+        .event-list {
+            list-style: none;
+            padding: 0;
+        }
+        .event-list li {
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            background: rgba(26, 26, 36, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid var(--neon-cyan);
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        .event-list li:hover {
+            background: rgba(0, 245, 255, 0.1);
+            border-left-color: var(--neon-purple);
+            transform: translateX(5px);
+        }
+        .insight {
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+            backdrop-filter: blur(10px);
+        }
+        .insight.positive {
+            background: rgba(0, 245, 255, 0.1);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+        .insight.warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+            color: #ffdb58;
+        }
+        .insight.info {
+            background: rgba(180, 0, 255, 0.1);
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+        .session-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .session-card {
+            background: rgba(26, 26, 36, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            color: var(--text-primary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 245, 255, 0.1);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .session-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
+            opacity: 0.6;
+        }
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 245, 255, 0.3);
+            border-color: var(--neon-cyan);
+        }
+        .session-card:hover::before {
+            opacity: 1;
+            height: 4px;
+        }
+        .session-card h4 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+            padding-bottom: 0.5rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+        }
+        .session-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .session-card li {
+            padding: 0.3rem 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .session-card li strong {
+            color: var(--text-primary);
+        }
+        
+        /* Visualization Grid Styling */
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .visualization-grid img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 245, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(26, 26, 36, 0.6);
+            padding: 1rem;
+            cursor: zoom-in;
+        }
+        .visualization-grid img:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 245, 255, 0.4);
+        }
+        
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+        .lightbox.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 12px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 100px rgba(0, 245, 255, 0.5);
+            animation: zoomIn 0.3s ease;
+            cursor: zoom-out;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 40px;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            background: rgba(26, 26, 36, 0.8);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(0, 245, 255, 0.3);
+            transition: all 0.3s;
+            text-shadow: 0 0 20px rgba(0, 245, 255, 0.8);
+        }
+        .lightbox-close:hover {
+            background: rgba(0, 245, 255, 0.2);
+            border-color: var(--neon-cyan);
+            transform: rotate(90deg);
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.6);
+        }
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sleep Analysis Summaries</h1>
+        <p>Comprehensive Sleep Quality Reports for All Subjects</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="subject1.html">Subject 1</a></li>
+            <li><a href="subject2.html">Subject 2</a></li>
+            <li><a href="subject3.html">Subject 3</a></li>
+            <li><a href="subject4.html">Subject 4</a></li>
+            <li><a href="summaries.html" class="active">Summaries</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="summary-section">
+            <h2>Sleep Quality Analysis Reports</h2>
+            <p>Detailed analysis summaries for each subject including session statistics, event detection, frequency analysis, and automated insights.</p>
+            
+            <div class="summary-nav">
+                <button onclick="showSummary('user1')" class="active" id="btn-user1">Subject 1</button>
+                <button onclick="showSummary('user2')" id="btn-user2">Subject 2</button>
+                <button onclick="showSummary('user3')" id="btn-user3">Subject 3</button>
+                <button onclick="showSummary('user4')" id="btn-user4">Subject 4</button>
+                <button onclick="showSummary('overall')" id="btn-overall">Overall Summary</button>
+            </div>
+        </section>
+
+        <!-- User 1 Summary -->
+        <div id="summary-user1" class="summary-content active">
+            <div class="summary-section">
+                <h2>Subject 1 Sleep Analysis Report</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Sessions</strong>
+                        <div class="stat-value">4</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Data Points</strong>
+                        <div class="stat-value">1,908</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Overall Assessment</strong>
+                        <div class="stat-value">😊 Good</div>
+                    </div>
+                </div>
+
+                <h3>Session Comparison</h3>
+                <div class="session-comparison">
+                    <div class="session-card">
+                        <h4>📊 Baseline</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>70.4</strong></li>
+                            <li>Mean SpO₂: <strong>97.4%</strong></li>
+                            <li>HRV: <strong>41.1 ms</strong></li>
+                            <li>Total Motion: <strong>2553.0</strong></li>
+                            <li>Movement Bursts: <strong>46</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(180, 0, 255, 0.15) 0%, rgba(255, 0, 100, 0.15) 100%); border-left: 3px solid #b400ff;">
+                        <h4>💤 Sleep Session 1</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>65.6</strong> (-6.9%)</li>
+                            <li>Mean SpO₂: <strong>96.8%</strong></li>
+                            <li>HRV: <strong>50.8 ms</strong> (+23.4%)</li>
+                            <li>Total Motion: <strong>3006.6</strong></li>
+                            <li>SpO₂ Dips: <strong>41</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(0, 245, 255, 0.15) 0%, rgba(0, 128, 255, 0.15) 100%); border-left: 3px solid #00f5ff;">
+                        <h4>💤 Sleep Session 2</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>64.6</strong> (-8.3%)</li>
+                            <li>Mean SpO₂: <strong>96.8%</strong></li>
+                            <li>HRV: <strong>46.7 ms</strong> (+13.6%)</li>
+                            <li>Total Motion: <strong>2621.2</strong></li>
+                            <li>SpO₂ Dips: <strong>47</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(67, 233, 123, 0.15) 0%, rgba(56, 249, 215, 0.15) 100%); border-left: 3px solid #43e97b;">
+                        <h4>💤 Sleep Session 3</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>63.7</strong> (-9.6%)</li>
+                            <li>Mean SpO₂: <strong>97.0%</strong></li>
+                            <li>HRV: <strong>41.2 ms</strong> (+0.1%)</li>
+                            <li>Total Motion: <strong>3700.5</strong></li>
+                            <li>SpO₂ Dips: <strong>51</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Automated Insights</h3>
+                <div class="insight positive">
+                    ✅ Heart rate decreased by 5.8 BPM during sleep, indicating good relaxation.
+                </div>
+                <div class="insight positive">
+                    ✅ HRV improved by 5.1 ms during sleep, indicating better autonomic regulation.
+                </div>
+                <div class="insight warning">
+                    ⚠️ Movement increased by 556.4 units during sleep, indicating restless sleep.
+                </div>
+
+                <h3>Event Detection Summary</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Movement Episodes</strong>
+                        <div class="stat-value">193</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>SpO₂ Dip Events</strong>
+                        <div class="stat-value">139</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Low HRV Periods</strong>
+                        <div class="stat-value">78</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User 2 Summary -->
+        <div id="summary-user2" class="summary-content">
+            <div class="summary-section">
+                <h2>Subject 2 Sleep Analysis Report</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Sessions</strong>
+                        <div class="stat-value">4</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Data Points</strong>
+                        <div class="stat-value">1,872</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Overall Assessment</strong>
+                        <div class="stat-value">😊 Good</div>
+                    </div>
+                </div>
+
+                <h3>Session Comparison</h3>
+                <div class="session-comparison">
+                    <div class="session-card">
+                        <h4>📊 Baseline</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>71.4</strong></li>
+                            <li>Mean SpO₂: <strong>97.5%</strong></li>
+                            <li>HRV: <strong>44.4 ms</strong></li>
+                            <li>Total Motion: <strong>3788.4</strong></li>
+                            <li>Movement Bursts: <strong>76</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(180, 0, 255, 0.15) 0%, rgba(255, 0, 100, 0.15) 100%); border-left: 3px solid #b400ff;">
+                        <h4>💤 Sleep Session 1</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>60.2</strong> (-15.7%)</li>
+                            <li>Mean SpO₂: <strong>97.0%</strong></li>
+                            <li>HRV: <strong>4.6 ms</strong> (-89.6%)</li>
+                            <li>Total Motion: <strong>3535.5</strong></li>
+                            <li>SpO₂ Dips: <strong>43</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(0, 245, 255, 0.15) 0%, rgba(0, 128, 255, 0.15) 100%); border-left: 3px solid #00f5ff;">
+                        <h4>💤 Sleep Session 2</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>60.1</strong> (-15.9%)</li>
+                            <li>Mean SpO₂: <strong>96.8%</strong></li>
+                            <li>HRV: <strong>3.0 ms</strong> (-93.3%)</li>
+                            <li>Total Motion: <strong>2887.6</strong></li>
+                            <li>SpO₂ Dips: <strong>47</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(67, 233, 123, 0.15) 0%, rgba(56, 249, 215, 0.15) 100%); border-left: 3px solid #43e97b;">
+                        <h4>💤 Sleep Session 3</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>60.2</strong> (-15.7%)</li>
+                            <li>Mean SpO₂: <strong>97.2%</strong></li>
+                            <li>HRV: <strong>6.5 ms</strong> (-85.4%)</li>
+                            <li>Total Motion: <strong>2027.4</strong></li>
+                            <li>SpO₂ Dips: <strong>17</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Automated Insights</h3>
+                <div class="insight positive">
+                    ✅ Heart rate decreased by 11.2 BPM during sleep, indicating excellent relaxation.
+                </div>
+                <div class="insight warning">
+                    ⚠️ HRV decreased by 39.7 ms during sleep - may indicate stress or poor sleep quality.
+                </div>
+                <div class="insight positive">
+                    ✅ Movement decreased by 971.0 units during sleep, indicating restful sleep.
+                </div>
+
+                <h3>Event Detection Summary</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Movement Episodes</strong>
+                        <div class="stat-value">216</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>SpO₂ Dip Events</strong>
+                        <div class="stat-value">107</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Low HRV Periods</strong>
+                        <div class="stat-value">14</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User 3 Summary -->
+        <div id="summary-user3" class="summary-content">
+            <div class="summary-section">
+                <h2>Subject 3 Sleep Analysis Report</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Sessions</strong>
+                        <div class="stat-value">4</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Data Points</strong>
+                        <div class="stat-value">1,844</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Overall Assessment</strong>
+                        <div class="stat-value">😊 Good</div>
+                    </div>
+                </div>
+
+                <h3>Session Comparison</h3>
+                <div class="session-comparison">
+                    <div class="session-card">
+                        <h4>📊 Baseline</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>75.2</strong></li>
+                            <li>Mean SpO₂: <strong>97.4%</strong></li>
+                            <li>HRV: <strong>37.3 ms</strong></li>
+                            <li>Total Motion: <strong>3673.1</strong></li>
+                            <li>Movement Bursts: <strong>76</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(180, 0, 255, 0.15) 0%, rgba(255, 0, 100, 0.15) 100%); border-left: 3px solid #b400ff;">
+                        <h4>💤 Sleep Session 1</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>62.8</strong> (-16.5%)</li>
+                            <li>Mean SpO₂: <strong>96.9%</strong></li>
+                            <li>HRV: <strong>41.9 ms</strong> (+12.3%)</li>
+                            <li>Total Motion: <strong>3032.9</strong></li>
+                            <li>SpO₂ Dips: <strong>44</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(0, 245, 255, 0.15) 0%, rgba(0, 128, 255, 0.15) 100%); border-left: 3px solid #00f5ff;">
+                        <h4>💤 Sleep Session 2</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>62.7</strong> (-16.6%)</li>
+                            <li>Mean SpO₂: <strong>97.0%</strong></li>
+                            <li>HRV: <strong>41.9 ms</strong> (+12.3%)</li>
+                            <li>Total Motion: <strong>2450.9</strong></li>
+                            <li>SpO₂ Dips: <strong>32</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(67, 233, 123, 0.15) 0%, rgba(56, 249, 215, 0.15) 100%); border-left: 3px solid #43e97b;">
+                        <h4>💤 Sleep Session 3</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>63.3</strong> (-15.8%)</li>
+                            <li>Mean SpO₂: <strong>97.1%</strong></li>
+                            <li>HRV: <strong>41.9 ms</strong> (+12.4%)</li>
+                            <li>Total Motion: <strong>2401.8</strong></li>
+                            <li>SpO₂ Dips: <strong>11</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Automated Insights</h3>
+                <div class="insight positive">
+                    ✅ Heart rate decreased by 12.3 BPM during sleep, indicating excellent relaxation.
+                </div>
+                <div class="insight positive">
+                    ✅ HRV improved by 4.6 ms during sleep, indicating better autonomic regulation.
+                </div>
+                <div class="insight positive">
+                    ✅ Movement decreased by 1044.5 units during sleep, indicating restful sleep.
+                </div>
+
+                <h3>Event Detection Summary</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Movement Episodes</strong>
+                        <div class="stat-value">185</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>SpO₂ Dip Events</strong>
+                        <div class="stat-value">87</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Low HRV Periods</strong>
+                        <div class="stat-value">38</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User 4 Summary -->
+        <div id="summary-user4" class="summary-content">
+            <div class="summary-section">
+                <h2>Subject 4 Sleep Analysis Report</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Sessions</strong>
+                        <div class="stat-value">4</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Data Points</strong>
+                        <div class="stat-value">1,844</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Overall Assessment</strong>
+                        <div class="stat-value">😊 Good</div>
+                    </div>
+                </div>
+
+                <h3>Session Comparison</h3>
+                <div class="session-comparison">
+                    <div class="session-card">
+                        <h4>📊 Baseline</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>75.1</strong></li>
+                            <li>Mean SpO₂: <strong>97.2%</strong></li>
+                            <li>HRV: <strong>40.7 ms</strong></li>
+                            <li>Total Motion: <strong>6848.4</strong></li>
+                            <li>Movement Bursts: <strong>130</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(180, 0, 255, 0.15) 0%, rgba(255, 0, 100, 0.15) 100%); border-left: 3px solid #b400ff;">
+                        <h4>💤 Sleep Session 1</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>63.3</strong> (-15.8%)</li>
+                            <li>Mean SpO₂: <strong>96.8%</strong></li>
+                            <li>HRV: <strong>40.5 ms</strong> (-0.5%)</li>
+                            <li>Total Motion: <strong>4236.9</strong></li>
+                            <li>SpO₂ Dips: <strong>57</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(0, 245, 255, 0.15) 0%, rgba(0, 128, 255, 0.15) 100%); border-left: 3px solid #00f5ff;">
+                        <h4>💤 Sleep Session 2</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>63.2</strong> (-15.9%)</li>
+                            <li>Mean SpO₂: <strong>96.9%</strong></li>
+                            <li>HRV: <strong>40.6 ms</strong> (-0.1%)</li>
+                            <li>Total Motion: <strong>3048.4</strong></li>
+                            <li>SpO₂ Dips: <strong>32</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(67, 233, 123, 0.15) 0%, rgba(56, 249, 215, 0.15) 100%); border-left: 3px solid #43e97b;">
+                        <h4>💤 Sleep Session 3</h4>
+                        <ul>
+                            <li>Mean BPM: <strong>63.4</strong> (-15.5%)</li>
+                            <li>Mean SpO₂: <strong>97.0%</strong></li>
+                            <li>HRV: <strong>40.5 ms</strong> (-0.6%)</li>
+                            <li>Total Motion: <strong>2758.6</strong></li>
+                            <li>SpO₂ Dips: <strong>13</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Automated Insights</h3>
+                <div class="insight positive">
+                    ✅ Heart rate decreased by 11.8 BPM during sleep, indicating excellent relaxation.
+                </div>
+                <div class="insight info">
+                    ℹ️ HRV remained stable (0.2 ms change) - consistent autonomic function.
+                </div>
+                <div class="insight positive">
+                    ✅ Movement decreased by 3500.0 units during sleep, indicating very restful sleep.
+                </div>
+
+                <h3>Event Detection Summary</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Movement Episodes</strong>
+                        <div class="stat-value">321</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>SpO₂ Dip Events</strong>
+                        <div class="stat-value">102</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Low HRV Periods</strong>
+                        <div class="stat-value">92</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Summary -->
+        <div id="summary-overall" class="summary-content">
+            <div class="summary-section">
+                <h2>Overall Sleep Analysis Summary</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Total Users</strong>
+                        <div class="stat-value">4</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Total Sessions</strong>
+                        <div class="stat-value">16</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Total Data Points</strong>
+                        <div class="stat-value">~7,500</div>
+                    </div>
+                </div>
+
+                <h3>Inter-User Comparison</h3>
+                <div class="session-comparison">
+                    <div class="session-card">
+                        <h4>🏆 Subject 1</h4>
+                        <ul>
+                            <li>BPM Change: <strong>-8.3%</strong></li>
+                            <li>HRV Change: <strong>+12.3%</strong></li>
+                            <li>Motion Change: <strong>+21.8%</strong></li>
+                            <li>Avg Sleep BPM: <strong>64.6</strong></li>
+                            <li>Avg Sleep SpO₂: <strong>96.9%</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(180, 0, 255, 0.15) 0%, rgba(255, 0, 100, 0.15) 100%); border-left: 3px solid #b400ff;">
+                        <h4>🏆 Subject 2</h4>
+                        <ul>
+                            <li>BPM Change: <strong>-15.7%</strong></li>
+                            <li>HRV Change: <strong>-89.5%</strong></li>
+                            <li>Motion Change: <strong>-25.6%</strong></li>
+                            <li>Avg Sleep BPM: <strong>60.2</strong></li>
+                            <li>Avg Sleep SpO₂: <strong>97.0%</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(0, 245, 255, 0.15) 0%, rgba(0, 128, 255, 0.15) 100%); border-left: 3px solid #00f5ff;">
+                        <h4>🏆 Subject 3</h4>
+                        <ul>
+                            <li>BPM Change: <strong>-16.4%</strong></li>
+                            <li>HRV Change: <strong>+12.4%</strong></li>
+                            <li>Motion Change: <strong>-28.4%</strong></li>
+                            <li>Avg Sleep BPM: <strong>62.9</strong></li>
+                            <li>Avg Sleep SpO₂: <strong>97.0%</strong></li>
+                        </ul>
+                    </div>
+                    <div class="session-card" style="background: linear-gradient(135deg, rgba(67, 233, 123, 0.15) 0%, rgba(56, 249, 215, 0.15) 100%); border-left: 3px solid #43e97b;">
+                        <h4>🏆 Subject 4</h4>
+                        <ul>
+                            <li>BPM Change: <strong>-15.7%</strong></li>
+                            <li>HRV Change: <strong>-0.6%</strong></li>
+                            <li>Motion Change: <strong>-51.1%</strong></li>
+                            <li>Avg Sleep BPM: <strong>63.3</strong></li>
+                            <li>Avg Sleep SpO₂: <strong>96.9%</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Key Findings</h3>
+                <div class="insight info">
+                    <strong>Heart Rate:</strong> Average change of -15.7% from baseline to sleep sessions - indicating excellent relaxation response
+                </div>
+                <div class="insight info">
+                    <strong>Movement:</strong> Average change of -29.4% from baseline to sleep sessions - showing reduced restlessness
+                </div>
+                <div class="insight warning">
+                    <strong>Oxygen Events:</strong> Total of 482 SpO₂ dip events detected across all users - monitoring recommended
+                </div>
+                <div class="insight info">
+                    <strong>Heart Rate Variability:</strong> Average change of -18.5% - varied responses across subjects
+                </div>
+
+                <h3>Performance Rankings</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>🥇 Deepest Sleeper</strong>
+                        <div class="stat-value">Subject 3</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>🌟 Most Restless</strong>
+                        <div class="stat-value">Subject 4</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>💪 Best Oxygen Stability</strong>
+                        <div class="stat-value">Subject 3</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>📈 Most Improvement</strong>
+                        <div class="stat-value">Subject 4</div>
+                    </div>
+                </div>
+
+                <h3>Total Event Detection</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>Movement Episodes</strong>
+                        <div class="stat-value">915</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>SpO₂ Dip Events</strong>
+                        <div class="stat-value">482</div>
+                    </div>
+                    <div class="stat-card">
+                        <strong>Low HRV Periods</strong>
+                        <div class="stat-value">222</div>
+                    </div>
+                </div>
+
+                <h3>Comparative Visualizations</h3>
+                <div class="visualization-grid">
+                    <div class="viz-item">
+                        <h4>📊 Multi-User Comparison</h4>
+                        <p>Side-by-side comparison of key metrics across all four subjects</p>
+                        <img src="overall_summary /multi_user_bar_charts.png" alt="Multi-User Bar Charts" class="viz-image">
+                    </div>
+                    <div class="viz-item">
+                        <h4>🔥 Global Correlation Heatmap</h4>
+                        <p>Relationships between all biometric measurements across subjects</p>
+                        <img src="overall_summary /global_correlation_heatmap.png" alt="Global Correlation Heatmap" class="viz-image">
+                    </div>
+                    <div class="viz-item">
+                        <h4>📈 Scatter Relationships</h4>
+                        <p>Pairwise relationships showing patterns in sleep data</p>
+                        <img src="overall_summary /scatter_relationships.png" alt="Scatter Plot Relationships" class="viz-image">
+                    </div>
+                    <div class="viz-item">
+                        <h4>📊 User Distributions</h4>
+                        <p>Statistical distribution of metrics for each subject</p>
+                        <img src="overall_summary /user_distributions.png" alt="User Distributions" class="viz-image">
+                    </div>
+                </div>
+
+                <h3>Technical Summary</h3>
+                <p><strong>Analysis Period:</strong> December 2025</p>
+                <p><strong>Sampling Rate:</strong> ~15 second intervals</p>
+                <p><strong>Data Source:</strong> ThingSpeak IoT Platform (Channel 3188672)</p>
+                <p><strong>Signal Processing:</strong> Moving average smoothing, artifact removal, FFT analysis</p>
+                <p><strong>Feature Extraction:</strong> HRV calculation, peak detection, frequency analysis</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sleep Quality Monitoring System | Team embed and breakfast</p>
+    </footer>
+
+    <!-- Lightbox for full-screen images -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="Full screen image">
+    </div>
+
+    <script>
+        function showSummary(summaryId) {
+            // Hide all summaries
+            const allSummaries = document.querySelectorAll('.summary-content');
+            allSummaries.forEach(summary => {
+                summary.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const allButtons = document.querySelectorAll('.summary-nav button');
+            allButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected summary
+            document.getElementById('summary-' + summaryId).classList.add('active');
+            document.getElementById('btn-' + summaryId).classList.add('active');
+
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Lightbox functionality
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imageSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        // Add click listeners to all visualization images
+        document.addEventListener('DOMContentLoaded', function() {
+            const vizImages = document.querySelectorAll('.viz-image, .visualization-grid img');
+            vizImages.forEach(img => {
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openLightbox(this.src);
+                });
+            });
+
+            // Close on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

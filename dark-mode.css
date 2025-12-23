@@ -1,0 +1,420 @@
+/* 🌙 SLEEK DARK MODE OVERRIDES - Electronic Device Dashboard */
+
+/* Reset everything to dark */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-cyan) var(--bg-primary);
+}
+
+:root {
+    /* Dark Mode Colors */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-tertiary: #1a1a24;
+    
+    --neon-cyan: #00f5ff;
+    --neon-purple: #b400ff;
+    --neon-pink: #ff00ff;
+    --neon-blue: #0080ff;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+    --text-dim: #606070;
+    
+    --glow-cyan: 0 0 20px rgba(0, 245, 255, 0.5);
+    --glow-purple: 0 0 20px rgba(180, 0, 255, 0.5);
+    
+    --gradient-neon: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
+    --shadow-floating: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 245, 255, 0.15);
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 245, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(180, 0, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: bgPulse 10s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Header - Glassmorphism */
+header {
+    background: rgba(18, 18, 26, 0.7) !important;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 245, 255, 0.1) !important;
+    box-shadow: var(--shadow-floating) !important;
+}
+
+header h1 {
+    background: var(--gradient-neon);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite;
+    letter-spacing: 2px;
+}
+
+@keyframes titleGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+
+header p {
+    color: var(--text-secondary) !important;
+}
+
+/* Navigation - Floating Pills */
+nav {
+    background: rgba(26, 26, 36, 0.6) !important;
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 245, 255, 0.1) !important;
+}
+
+nav a {
+    color: var(--text-secondary) !important;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 245, 255, 0.2);
+    border-radius: 25px;
+}
+
+nav a:hover {
+    color: var(--neon-cyan) !important;
+    background: rgba(0, 245, 255, 0.1) !important;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+}
+
+nav a.active {
+    color: var(--text-primary) !important;
+    background: var(--gradient-neon) !important;
+    box-shadow: var(--glow-cyan);
+}
+
+/* Main Content */
+main {
+    position: relative;
+    z-index: 1;
+}
+
+/* Floating Glass Sections */
+section {
+    background: rgba(18, 18, 26, 0.6) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 245, 255, 0.1) !important;
+    box-shadow: var(--shadow-floating) !important;
+    animation: floatIn 0.8s ease-out both;
+}
+
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section::before {
+    background: var(--gradient-neon) !important;
+    opacity: 0.5;
+}
+
+section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 60px rgba(0, 245, 255, 0.2) !important;
+    border-color: rgba(0, 245, 255, 0.3) !important;
+}
+
+section h2 {
+    color: var(--text-primary) !important;
+}
+
+section h2::after {
+    background: var(--gradient-neon) !important;
+    box-shadow: var(--glow-cyan);
+}
+
+/* Floating Cards with Neon Accents */
+.subject-card, .project-card, .stat-card, .viz-item {
+    background: rgba(26, 26, 36, 0.8) !important;
+    border: 1px solid rgba(0, 245, 255, 0.15) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 245, 255, 0.1) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: cardFloat 0.8s ease-out both;
+}
+
+@keyframes cardFloat {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.subject-card:hover, .project-card:hover, .stat-card:hover, .viz-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--neon-cyan) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 245, 255, 0.4) !important;
+}
+
+.subject-card h3, .project-card h3, .stat-card strong {
+    background: var(--gradient-neon);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Highlighted Numbers - Glowing Effect */
+.stat-value, .data-value, .value {
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    color: var(--neon-cyan) !important;
+    text-shadow: var(--glow-cyan);
+    animation: numberPulse 2s ease-in-out infinite;
+}
+
+@keyframes numberPulse {
+    0%, 100% {
+        text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 40px rgba(180, 0, 255, 0.4);
+    }
+}
+
+/* Metric Values */
+.metric-item .value, .metric .value {
+    color: var(--neon-cyan) !important;
+    font-size: 1.8rem !important;
+    font-weight: 600 !important;
+    text-shadow: var(--glow-cyan);
+}
+
+/* Session Cards */
+.session-metrics-card {
+    background: rgba(26, 26, 36, 0.9) !important;
+    border: 1px solid rgba(180, 0, 255, 0.2) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(180, 0, 255, 0.15) !important;
+}
+
+.session-metrics-card h3 {
+    background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Buttons */
+.btn, button {
+    background: var(--gradient-neon) !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    box-shadow: var(--glow-cyan);
+    transition: all 0.3s ease;
+}
+
+.btn:hover, button:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.6), 0 0 50px rgba(180, 0, 255, 0.4) !important;
+}
+
+/* Loading & Status */
+.loading {
+    color: var(--neon-cyan) !important;
+    animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.status-ready {
+    color: var(--neon-cyan) !important;
+}
+
+.status-warning {
+    color: var(--neon-purple) !important;
+}
+
+.status-error {
+    color: var(--neon-pink) !important;
+}
+
+/* Insights */
+.insight {
+    background: rgba(26, 26, 36, 0.8) !important;
+    border-left: 3px solid var(--neon-cyan) !important;
+    color: var(--text-secondary) !important;
+}
+
+.insight.warning {
+    border-left-color: var(--neon-purple) !important;
+}
+
+.insight.error {
+    border-left-color: var(--neon-pink) !important;
+}
+
+/* Footer */
+footer {
+    background: rgba(18, 18, 26, 0.8) !important;
+    border-top: 1px solid rgba(0, 245, 255, 0.1) !important;
+    color: var(--text-dim) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neon-cyan);
+    border-radius: 5px;
+    box-shadow: var(--glow-cyan);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-purple);
+}
+
+/* Floating Animation for Cards */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.subject-card, .stat-card {
+    animation: float 6s ease-in-out infinite;
+}
+
+.subject-card:nth-child(2), .stat-card:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.subject-card:nth-child(3), .stat-card:nth-child(3) {
+    animation-delay: 1s;
+}
+
+.subject-card:nth-child(4), .stat-card:nth-child(4) {
+    animation-delay: 1.5s;
+}
+
+/* Force Dark Mode on ALL Metric Cards */
+.metric-card, .data-card, .biometric-card, 
+.metric-item, .data-item, .biometric-item,
+[class*="metric"], [class*="data-"], [class*="biometric"] {
+    background: rgba(26, 26, 36, 0.8) !important;
+    border: 1px solid rgba(0, 245, 255, 0.15) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Subject Pages - Metric Grid Cards */
+.metrics-grid .metric-card,
+.biometrics-grid .metric-card,
+.session-metrics-card {
+    background: rgba(26, 26, 36, 0.8) !important;
+    border: 1px solid rgba(0, 245, 255, 0.15) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Override any white backgrounds */
+div[style*="background: white"],
+div[style*="background: #fff"],
+div[style*="background-color: white"],
+div[style*="background-color: #fff"] {
+    background: rgba(26, 26, 36, 0.8) !important;
+}
+
+/* Metric Labels */
+.metric-card h4, .metric-card h3, 
+.data-card h4, .data-card h3 {
+    color: var(--text-secondary) !important;
+}
+
+/* Metric Values - Big Numbers */
+.metric-card .value, .data-card .value,
+.metric-card strong, .data-card strong {
+    color: var(--neon-cyan) !important;
+    text-shadow: var(--glow-cyan);
+}
+
+/* HOME PAGE - Project Cards Fix */
+.project-card, .feature-card, .info-card,
+section .project-card, main .project-card,
+.overview-item, .tech-item {
+    background: rgba(26, 26, 36, 0.8) !important;
+    border: 1px solid rgba(0, 245, 255, 0.15) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Fix hover - OVERRIDE white background from styles.css */
+.overview-item:hover, .tech-item:hover, .project-card:hover {
+    background: rgba(0, 245, 255, 0.1) !important;
+    border-color: var(--neon-cyan) !important;
+    transform: translateY(-5px) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 245, 255, 0.3) !important;
+}
+
+/* Ensure text stays visible */
+.overview-item h3, .tech-item h4, .project-card h3 {
+    color: var(--neon-cyan) !important;
+    text-shadow: 0 0 10px rgba(0, 245, 255, 0.3) !important;
+}
+
+.overview-item:hover h3, .tech-item:hover h4, .project-card:hover h3 {
+    color: var(--neon-cyan) !important;
+}
+
+.overview-item ul li, .tech-item ul li, .project-card ul li,
+.overview-item p, .tech-item p, .project-card p {
+    color: var(--text-secondary) !important;
+}
+
+.overview-item:hover ul li, .tech-item:hover ul li, .project-card:hover ul li,
+.overview-item:hover p, .tech-item:hover p, .project-card:hover p {
+    color: var(--text-primary) !important;
+}
+
+/* Dashboard Section Cards */
+.dashboard-card, .subject-link-card {
+    background: var(--gradient-neon) !important;
+    border: 1px solid transparent !important;
+}
+
+/* Force all white/light colored divs inside sections to dark */
+section > div:not([class*="grid"]):not([class*="button"]) {
+    background: rgba(26, 26, 36, 0.8) !important;
+}
